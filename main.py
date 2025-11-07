@@ -4,6 +4,7 @@ from datetime import datetime
 def main(page: ft.Page):
     page.title = 'Мое первое приложение'
     greeting_text = ft.Text("Hello world")
+    page.theme_mode = ft.ThemeMode.LIGHT
 
     greeting_history = []
     history_text = ft.Text('История приветствий:')
@@ -33,10 +34,30 @@ def main(page: ft.Page):
     name_input = ft.TextField(label='Введите имя', on_submit=on_button_click)
     name_button = ft.ElevatedButton('send', icon=ft.Icons.SEND, on_click=on_button_click)
 
+    def clear_history(_):
+        print(greeting_history)
+        greeting_history.clear()
+        print(greeting_history)
+        history_text.value = 'История приветствий:'
+        page.update()
+
+
+    clear_button = ft.IconButton(icon=ft.Icons.DELETE, on_click=clear_history)
+
+    def theme_mode(_):
+        if page.theme_mode == ft.ThemeMode.LIGHT:
+            page.theme_mode = ft.ThemeMode.DARK
+        else: 
+            page.theme_mode = ft.ThemeMode.LIGHT
+            
+        page.update()
+
+    theme_mode_button = ft.IconButton(icon=ft.Icons.BRIGHTNESS_6, on_click=theme_mode)
+
     # name_button_text = ft.TextButton('send')
     # name_button_icon = ft.IconButton(icon=ft.Icons.SEND)
 
-    page.add(greeting_text, name_input, name_button, history_text)
+    page.add(greeting_text, name_input, name_button, clear_button, theme_mode_button, history_text)
 
 
 ft.app(target=main)
